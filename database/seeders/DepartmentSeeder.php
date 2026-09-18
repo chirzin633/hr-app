@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Department;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+
 
 class DepartmentSeeder extends Seeder
 {
@@ -12,6 +14,8 @@ class DepartmentSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        Department::factory(5)->create([
+            'status' => 'active'
+        ]);
     }
 }
