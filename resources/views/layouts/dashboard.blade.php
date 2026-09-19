@@ -14,6 +14,9 @@
     <link rel="stylesheet" href="{{ asset('mazer/dist/assets/compiled/css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('mazer/dist/assets/compiled/css/app-dark.css') }}">
     <link rel="stylesheet" href="{{ asset('mazer/dist/assets/compiled/css/iconly.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('mazer/dist/assets/extensions/simple-datatables/style.css') }}" />
+    <link rel="stylesheet" href="{{ asset('mazer/dist/assets/compiled/css/table-datatable.css') }}" />
 </head>
 
 <body>
@@ -68,14 +71,14 @@
                         <li class="sidebar-title">Menu</li>
 
                         <li class="sidebar-item active">
-                            <a href="#" class='sidebar-link'>
+                            <a href="/dashboard" class='sidebar-link'>
                                 <i class="bi-grid-fill bi"></i>
                                 <span>Dashboard</span>
                             </a>
                         </li>
 
                         <li class="sidebar-item">
-                            <a href="#" class='sidebar-link'>
+                            <a href="/task" class='sidebar-link'>
                                 <i class="bi-check-circle-fill bi"></i>
                                 <span>Task</span>
                             </a>
@@ -144,12 +147,14 @@
     </div>
     <script src="{{ asset('mazer/dist/assets/static/js/components/dark.js') }}"></script>
     <script src="{{ asset('mazer/dist/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
-
     <script src="{{ asset('mazer/dist/assets/compiled/js/app.js') }}"></script>
 
     <!-- Need: Apexcharts -->
     <script src="{{ asset('mazer/dist/assets/extensions/apexcharts/apexcharts.min.js') }}"></script>
-    <script src="{{ asset('mazer/dist/assets/static/js/pages/dashboard.js"') }}"></script>
+    <script src="{{ asset('mazer/dist/assets/static/js/pages/dashboard.js') }}"></script>
+
+    <script src="{{ asset('mazer/dist/assets/extensions/simple-datatables/umd/simple-datatables.js') }}"></script>
+    <script src="{{ asset('mazer/dist/assets/static/js/pages/simple-datatables.js') }}"></script>
 
 </body>
 
