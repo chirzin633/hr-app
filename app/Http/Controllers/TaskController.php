@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Employee;
 use App\Models\Task;
 use Illuminate\Http\Request;
 
@@ -12,5 +13,28 @@ class TaskController extends Controller
         $tasks = Task::all();
 
         return view('task.index', compact('tasks'));
+    }
+
+    public function create()
+    {
+        $employees = Employee::all();
+
+        return view('task.create', compact('employees'));
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'title' => ['required', 'string', 'max:255'],
+            'description' => ['nullable'],
+            'employee_id' => ['required'],
+            'due_date' => ['required', 'date'],
+        ]);
+
+        $validated['status'] = 'pending';
+
+        Task::create($validated);
+
+        return redirect()->route('task.index')->with('success', 'Task created successfully');
     }
 }
