@@ -67,6 +67,13 @@ class TaskController extends Controller
         return redirect()->route('task.index')->with('success', 'Task has been deleted');
     }
 
+    public function show(Task $task)
+    {
+        return view('task.show', compact('task'));
+
+        return redirect()->route('task.index');
+    }
+
     public function updateStatus(Request $request, Task $task)
     {
         $request->validate([

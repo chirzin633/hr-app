@@ -78,7 +78,7 @@
                                         @endswitch
                                     </td>
                                     <td>
-                                        <a href="#" class="badge bg-info">View</a>
+                                        <a href="{{ route('task.show', $task->id) }}" class="badge bg-info">View</a>
                                         <a href="{{ route('task.edit', $task->id) }}" class="badge bg-light">Edit</a>
                                         <form action="{{ route('task.destroy', $task->id) }}" method="POST"
                                             style="display: inline;">
