@@ -80,19 +80,43 @@
                                     <td>
                                         <a href="#" class="badge bg-info">View</a>
                                         <a href="{{ route('task.edit', $task->id) }}" class="badge bg-light">Edit</a>
-                                        <a href="#" class="badge bg-danger">Delete</a>
+                                        <form action="{{ route('task.destroy', $task->id) }}" method="POST"
+                                            style="display: inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="badge bg-danger">Delete</button>
+
+                                        </form>
 
                                         @switch($task->status)
                                             @case('pending')
-                                                <a href="#" class="badge bg-success">Done</a>
+                                                <form action="{{ route('task.updateStatus', $task) }}" method="POST"
+                                                    class="d-inline">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <input type="hidden" name="status" value="in_progress">
+                                                    <button type="submit" class="badge bg-primary border-0">Start Task</button>
+                                                </form>
                                             @break
 
                                             @case('in_progress')
-                                                <a href="#" class="badge bg-success">Mark Completed</a>
+                                                <form action="{{ route('task.updateStatus', $task) }}" method="POST"
+                                                    class="d-inline">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <input type="hidden" name="status" value="completed">
+                                                    <button type="submit" class="badge bg-success border-0">Mark Completed</button>
+                                                </form>
                                             @break
 
                                             @case('completed')
-                                                <a href="#" class="badge bg-warning">Reopen</a>
+                                                <form action="{{ route('task.updateStatus', $task) }}" method="POST"
+                                                    class="d-inline">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <input type="hidden" name="status" value="pending">
+                                                    <button type="submit" class="badge bg-warning border-0">Reopen</button>
+                                                </form>
                                             @break
                                         @endswitch
                                 </tr>

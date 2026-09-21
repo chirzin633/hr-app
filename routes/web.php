@@ -11,6 +11,7 @@ Route::get('/', function () {
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::resource('task', TaskController::class);
+Route::patch('task/{task}/status', [TaskController::class, 'updateStatus'])->name('task.updateStatus');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
