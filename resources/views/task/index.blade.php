@@ -79,7 +79,7 @@
                                     </td>
                                     <td>
                                         <a href="#" class="badge bg-info">View</a>
-                                        <a href="#" class="badge bg-light">Edit</a>
+                                        <a href="{{ route('task.edit', $task->id) }}" class="badge bg-light">Edit</a>
                                         <a href="#" class="badge bg-danger">Delete</a>
 
                                         @switch($task->status)
