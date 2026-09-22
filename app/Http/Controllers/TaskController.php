@@ -70,8 +70,6 @@ class TaskController extends Controller
     public function show(Task $task)
     {
         return view('task.show', compact('task'));
-
-        return redirect()->route('task.index');
     }
 
     public function updateStatus(Request $request, Task $task)

@@ -87,7 +87,7 @@
                         </li>
 
                         <li class="sidebar-item">
-                            <a href="#" class='sidebar-link'>
+                            <a href="/employee" class='sidebar-link'>
                                 <i class="bi-people-fill bi"></i>
                                 <span>Employee</span>
                             </a>
@@ -137,7 +137,7 @@
             <footer>
                 <div class="mb-0 text-muted footer clearfix">
                     <div class="float-start">
-                        <p>2023 &copy; Mazer</p>
+                        <p>{{ date('Y') }} &copy; Mazer</p>
                     </div>
                     <div class="float-end">
                         <p>Crafted with <span class="text-danger"><i class="bi bi-heart-fill icon-mid"></i></span>
