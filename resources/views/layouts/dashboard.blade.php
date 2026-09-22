@@ -94,7 +94,7 @@
                         </li>
 
                         <li class="sidebar-item">
-                            <a href="#" class='sidebar-link'>
+                            <a href="/department" class='sidebar-link'>
                                 <i class="bi-briefcase bi"></i>
                                 <span>Department</span>
                             </a>
