@@ -101,6 +101,13 @@
                         </li>
 
                         <li class="sidebar-item">
+                            <a href="/role" class='sidebar-link'>
+                                <i class="bi-person-fill-gear bi"></i>
+                                <span>Role</span>
+                            </a>
+                        </li>
+
+                        <li class="sidebar-item">
                             <a href="#" class='sidebar-link'>
                                 <i class="bi-table bi"></i>
                                 <span>Presence</span>
