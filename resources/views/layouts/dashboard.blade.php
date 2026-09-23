@@ -108,7 +108,7 @@
                         </li>
 
                         <li class="sidebar-item">
-                            <a href="#" class='sidebar-link'>
+                            <a href="/presence" class='sidebar-link'>
                                 <i class="bi-table bi"></i>
                                 <span>Presence</span>
                             </a>

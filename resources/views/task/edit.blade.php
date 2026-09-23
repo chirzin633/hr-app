@@ -56,7 +56,7 @@
                             <label for="employee_id" class="form-label">Employee</label>
                             <select name="employee_id" id="employee_id"
                                 class="form-control @error('employee_id') is-invalid @enderror">
-                                <option value="" disabled selected>-- Choose Employee --</option>
+                                <option value="" disabled>-- Choose Employee --</option>
                                 @foreach ($employees as $employee)
                                     <option value="{{ $employee->id }}" @selected(old('employee_id', $task->employee_id) == $employee->id)>
                                         {{ $employee->fullname }}</option>
@@ -69,8 +69,7 @@
 
                         <div class="mb-2">
                             <label for="due_date" class="form-label">Due Date</label>
-                            <input type="datetime-local"
-                                class="form-control datetime @error('due_date') is-invalid @enderror"
+                            <input type="date" class="form-control date @error('due_date') is-invalid @enderror"
                                 value="{{ old('due_date', $task->due_date) }}" name="due_date" required>
                             @error('due_date')
                                 <div class="invalid-feedback">{{ $message }}</div>
