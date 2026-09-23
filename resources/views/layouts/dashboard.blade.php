@@ -115,7 +115,7 @@
                         </li>
 
                         <li class="sidebar-item">
-                            <a href="#" class='sidebar-link'>
+                            <a href="/payroll" class='sidebar-link'>
                                 <i class="bi-currency-dollar bi"></i>
                                 <span>Payroll</span>
                             </a>

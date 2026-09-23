@@ -3,6 +3,7 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\PresenceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
@@ -18,6 +19,7 @@ Route::resource('employee', EmployeeController::class);
 Route::resource('department', DepartmentController::class);
 Route::resource('role', RoleController::class);
 Route::resource('presence', PresenceController::class);
+Route::resource('payroll', PayrollController::class);
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::resource('task', TaskController::class);
