@@ -52,9 +52,8 @@
 
                         <div class="mb-2">
                             <label for="due_date" class="form-label">Due Date</label>
-                            <input type="datetime-local" value="{{ old('due_date') }}"
-                                class="form-control datetime @error('due_date') is-invalid @enderror" name="due_date"
-                                required>
+                            <input type="date" value="{{ old('due_date') }}"
+                                class="form-control date @error('due_date') is-invalid @enderror" name="due_date" required>
                             @error('due_date')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror

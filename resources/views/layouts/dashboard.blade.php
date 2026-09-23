@@ -168,9 +168,16 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
     <script>
-        let dateTime = flatpickr('.datetime', {
+        flatpickr('.date', {
             dateFormat: "Y-m-d",
-            enableTime: true
+            enableTime: false
+        });
+
+        flatpickr('.time', {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: 'H:i',
+            time_24hr: true
         });
     </script>
 

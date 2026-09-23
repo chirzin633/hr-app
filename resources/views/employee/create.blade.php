@@ -80,7 +80,7 @@
                         <div class="mb-2">
                             <label for="birth_date" class="form-label">Birth Date</label>
                             <input type="date" value="{{ old('birth_date') }}"
-                                class="form-control datetime @error('birth_date') is-invalid @enderror" name="birth_date">
+                                class="form-control date @error('birth_date') is-invalid @enderror" name="birth_date">
                             @error('birth_date')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -89,7 +89,7 @@
                         <div class="mb-2">
                             <label for="hire_date" class="form-label">Hire Date</label>
                             <input type="date" value="{{ old('hire_date') }}"
-                                class="form-control datetime @error('hire_date') is-invalid @enderror" name="hire_date">
+                                class="form-control date @error('hire_date') is-invalid @enderror" name="hire_date">
                             @error('hire_date')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
