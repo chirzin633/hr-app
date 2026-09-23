@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Employee;
 use App\Models\Payroll;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class PayrollController extends Controller
@@ -11,6 +12,7 @@ class PayrollController extends Controller
     public function index()
     {
         $payrolls = Payroll::all();
+
         return view('payroll.index', compact('payrolls'));
     }
 
@@ -23,30 +25,16 @@ class PayrollController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'employee_id' => ['required', 'exists:employees,id'],
-            'salary' => ['numeric', 'required', 'min:0'],
-            'bonuses' => ['numeric', 'nullable', 'min:0'],
-            'deductions' => ['numeric', 'nullable', 'min:0'],
-            'pay_date' => ['required', 'date']
-        ]);
-
-        $bonuses = $validated['bonuses'] ?? 0;
-        $deductions = $validated['deductions'] ?? 0;
-        $net_salary = $validated['salary'] + $bonuses - $deductions;
-
-        $data = [
-            'employee_id' => $validated['employee_id'],
-            'salary' => $validated['salary'],
-            'bonuses' => $bonuses,
-            'deductions' => $deductions,
-            'net_salary' => $net_salary,
-            'pay_date' => $validated['pay_date']
-        ];
+        $data = $this->getPayrollData($request);
 
         Payroll::create($data);
 
         return redirect()->route('payroll.index')->with('success', 'Payroll has been created successfully!');
+    }
+
+    public function show(Payroll $payroll)
+    {
+        return view('payroll.show', compact('payroll'));
     }
 
     public function edit(Payroll $payroll)
@@ -58,28 +46,7 @@ class PayrollController extends Controller
 
     public function update(Request $request, Payroll $payroll)
     {
-        $validated = $request->validate([
-            'employee_id' => ['required', 'exists:employees,id'],
-            'salary' => ['numeric', 'required', 'min:0'],
-            'bonuses' => ['numeric', 'nullable', 'min:0'],
-            'deductions' => ['numeric', 'nullable', 'min:0'],
-            'pay_date' => ['required', 'date']
-        ]);
-
-
-        $salary = (int) $validated['salary'];
-        $bonuses = (int) $validated['bonuses'] ?? 0;
-        $deductions = (int) $validated['deductions'] ?? 0;
-        $net_salary = $salary + $bonuses - $deductions;
-
-        $data = [
-            'employee_id' => $validated['employee_id'],
-            'salary' => $salary,
-            'bonuses' => $bonuses,
-            'deductions' => $deductions,
-            'net_salary' => $net_salary,
-            'pay_date' => $validated['pay_date']
-        ];
+        $data = $this->getPayrollData($request);
 
         $payroll->update($data);
 
@@ -91,5 +58,40 @@ class PayrollController extends Controller
         $payroll->delete();
 
         return redirect()->route('payroll.index')->with('success', 'Payroll has been deled successfully!');
+    }
+
+
+    private function getPayrollData(Request $request)
+    {
+        $validated = $request->validate([
+            'employee_id' => ['required', 'exists:employees,id'],
+            'salary' => ['numeric', 'required', 'min:0'],
+            'bonuses' => ['numeric', 'nullable', 'min:0'],
+            'deductions' => ['numeric', 'nullable', 'min:0'],
+            'pay_date' => ['required', 'date']
+        ]);
+
+        $salary = (int) $validated['salary'];
+        $bonuses = (int) ($validated['bonuses'] ?? 0);
+        $deductions = (int) ($validated['deductions'] ?? 0);
+        $net_salary = $salary + $bonuses - $deductions;
+
+        return [
+            'employee_id' => $validated['employee_id'],
+            'salary' => $salary,
+            'bonuses' => $bonuses,
+            'deductions' => $deductions,
+            'net_salary' => $net_salary,
+            'pay_date' => $validated['pay_date']
+        ];
+    }
+
+    public function print(Payroll $payroll)
+    {
+        $pdf = Pdf::loadView('payroll.print', compact('payroll'));
+
+        $pdf->setPaper('A5', 'potrait');
+
+        return $pdf->stream('slip-gaji-' . $payroll->employee->fullname . '.pdf');
     }
 }

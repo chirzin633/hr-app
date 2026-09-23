@@ -20,6 +20,7 @@ Route::resource('department', DepartmentController::class);
 Route::resource('role', RoleController::class);
 Route::resource('presence', PresenceController::class);
 Route::resource('payroll', PayrollController::class);
+Route::get('/payroll/{payroll}/print', [PayrollController::class, 'print'])->name('payroll.print');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::resource('task', TaskController::class);
