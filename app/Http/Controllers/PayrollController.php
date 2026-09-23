@@ -66,13 +66,15 @@ class PayrollController extends Controller
             'pay_date' => ['required', 'date']
         ]);
 
-        $bonuses = $validated['bonuses'] ?? 0;
-        $deductions = $validated['deductions'] ?? 0;
-        $net_salary = $validated['salary'] + $bonuses - $deductions;
+
+        $salary = (int) $validated['salary'];
+        $bonuses = (int) $validated['bonuses'] ?? 0;
+        $deductions = (int) $validated['deductions'] ?? 0;
+        $net_salary = $salary + $bonuses - $deductions;
 
         $data = [
             'employee_id' => $validated['employee_id'],
-            'salary' => $validated['salary'],
+            'salary' => $salary,
             'bonuses' => $bonuses,
             'deductions' => $deductions,
             'net_salary' => $net_salary,

@@ -58,7 +58,7 @@
 
                         <div class="mb-2">
                             <label for="salary" class="form-label">Salary</label>
-                            <input type="number" class="form-control @error('salary') is-invalid @enderror" name="salary"
+                            <input type="text" class="form-control @error('salary') is-invalid @enderror" name="salary"
                                 value="{{ old('salary', $payroll->salary) }}" id="salary">
                             @error('salary')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -67,7 +67,7 @@
 
                         <div class="mb-2">
                             <label for="bonuses" class="form-label">Bonus</label>
-                            <input type="number" class="form-control @error('bonuses') is-invalid @enderror" name="bonuses"
+                            <input type="text" class="form-control @error('bonuses') is-invalid @enderror" name="bonuses"
                                 value="{{ old('bonuses', $payroll->bonuses) }}" id="bonuses">
                             @error('bonuses')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -76,7 +76,7 @@
 
                         <div class="mb-2">
                             <label for="deductions" class="form-label">Deduction</label>
-                            <input type="number" class="form-control @error('deductions') is-invalid @enderror"
+                            <input type="text" class="form-control @error('deductions') is-invalid @enderror"
                                 name="deductions" value="{{ old('deductions', $payroll->deductions) }}" id="deductions">
                             @error('deductions')
                                 <div class="invalid-feedback">{{ $message }}</div>
