@@ -89,20 +89,6 @@
                             @enderror
                         </div>
 
-                        <div class="mb-2">
-                            <label for="status" class="form-label">Status</label>
-                            <select name="status" id="status"
-                                class="form-control @error('status') is-invalid @enderror">
-                                <option value="" disabled selected>-- Choose Status --</option>
-                                <option value="approved">Approved</option>
-                                <option value="pending">Pending</option>
-                                <option value="rejected">Rejected</option>
-                            </select>
-                            @error('status')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
                         <button type="submit" class="btn btn-primary">Create Employee</button>
                         <a href="{{ route('employee.index') }}" class="btn btn-secondary">Back To List</a>
                     </form>

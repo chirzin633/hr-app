@@ -91,20 +91,6 @@
                             @enderror
                         </div>
 
-                        <div class="mb-2">
-                            <label for="status" class="form-label">Status</label>
-                            <select name="status" id="status"
-                                class="form-control @error('status') is-invalid @enderror">
-                                <option value="" disabled selected>-- Choose Status --</option>
-                                <option value="approved" @selected(old('status', $leave_request->status) == 'approved')>Approved</option>
-                                <option value="pending" @selected(old('status', $leave_request->status) == 'pending')>Pending</option>
-                                <option value="rejected" @selected(old('status', $leave_request->status) == 'rejected')>Rejected</option>
-                            </select>
-                            @error('status')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
                         <button type="submit" class="btn btn-primary">Update Leave Request</button>
                         <a href="{{ route('leave-request.index') }}" class="btn btn-secondary">Back To List</a>
                     </form>

@@ -27,8 +27,9 @@ class LeaveRequestController extends Controller
             'leave_type' => ['required'],
             'start_date' => ['date', 'required'],
             'end_date' => ['date', 'required'],
-            'status' => ['required']
         ]);
+
+        $validated['status'] = 'pending';
 
         LeaveRequest::create($validated);
 
@@ -50,7 +51,6 @@ class LeaveRequestController extends Controller
             'leave_type' => ['required'],
             'start_date' => ['date', 'required'],
             'end_date' => ['date', 'required'],
-            'status' => ['required']
         ]);
 
         $leave_request->update($validated);
@@ -62,5 +62,23 @@ class LeaveRequestController extends Controller
     {
         $leave_request->delete();
         return redirect()->route('leave-request.index')->with('success', 'Leave request has been deleted successfully!');
+    }
+
+    public function confirm(LeaveRequest $leave_request)
+    {
+        $leave_request->update([
+            'status' => 'approved'
+        ]);
+
+        return redirect()->route('leave-request.index')->with('success', 'Success!');
+    }
+
+    public function reject(LeaveRequest $leave_request)
+    {
+        $leave_request->update([
+            'status' => 'rejected'
+        ]);
+
+        return redirect()->route('leave-request.index')->with('success', 'Success!');
     }
 }

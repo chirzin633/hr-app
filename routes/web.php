@@ -23,6 +23,8 @@ Route::resource('presence', PresenceController::class);
 Route::resource('payroll', PayrollController::class);
 Route::get('/payroll/{payroll}/print', [PayrollController::class, 'print'])->name('payroll.print');
 Route::resource('leave-request', LeaveRequestController::class);
+Route::patch('/leave-request/{leave_request}/confirm', [LeaveRequestController::class, 'confirm'])->name('leave-request.confirm');
+Route::patch('/leave-request/{leave_request}/reject', [LeaveRequestController::class, 'reject'])->name('leave-request.reject');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::resource('task', TaskController::class);
