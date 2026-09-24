@@ -122,7 +122,7 @@
                         </li>
 
                         <li class="sidebar-item">
-                            <a href="#" class='sidebar-link'>
+                            <a href="/leave-request" class='sidebar-link'>
                                 <i class="bi-shift-fill bi"></i>
                                 <span>Leave Request</span>
                             </a>
