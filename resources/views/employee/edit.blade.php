@@ -139,23 +139,6 @@
                         </div>
 
                         <div class="mb-2">
-                            <label for="user_id" class="form-label">Linked User Account (opsional)</label>
-                            <select name="user_id" id="user_id"
-                                class="form-control @error('user_id') is-invalid @enderror">
-                                <option value="">-- Tanpa link user --</option>
-                                @foreach ($users as $user)
-                                    <option value="{{ $user->id }}" @selected(old('user_id', $linkedUserId) == $user->id)>
-                                        {{ $user->name }} ({{ $user->email }})
-                                    </option>
-                                @endforeach
-                            </select>
-                            <small class="text-muted">Pilih akun login yang akan dihubungkan ke employee ini agar tidak 403 saat login.</small>
-                            @error('user_id')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="mb-2">
                             <label for="status" class="form-label">Status</label>
                             <select name="status" id="status"
                                 class="form-control @error('status') is-invalid @enderror">

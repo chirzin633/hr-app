@@ -8,8 +8,6 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $user = auth()->user()->load('employee.role');
-
-        return view('dashboard.index', compact('user'));
+        return view('dashboard.index');
     }
 }
