@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Department;
 use App\Models\Employee;
 use App\Models\Role;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
@@ -19,8 +20,9 @@ class EmployeeController extends Controller
     {
         $departments =  Department::all();
         $roles = Role::all();
+        $users = User::whereNull('employee_id')->orderBy('name')->get();
 
-        return view('employee.create', compact('departments', 'roles'));
+        return view('employee.create', compact('departments', 'roles', 'users'));
     }
 
     public function store(Request $request)
@@ -35,10 +37,18 @@ class EmployeeController extends Controller
             'department_id' => ['required'],
             'role_id' => ['required'],
             'status' => ['required', 'string'],
-            'salary' => ['required', 'numeric']
+            'salary' => ['required', 'numeric'],
+            'user_id' => ['nullable', 'exists:users,id'],
         ]);
 
-        Employee::create($validated);
+        $userId = $validated['user_id'] ?? null;
+        unset($validated['user_id']);
+
+        $employee = Employee::create($validated);
+
+        if ($userId) {
+            User::whereKey($userId)->update(['employee_id' => $employee->id]);
+        }
 
         return redirect()->route('employee.index')->with('success', 'Employee has been created succesfully!');
     }
@@ -52,8 +62,13 @@ class EmployeeController extends Controller
     {
         $departments = Department::all();
         $roles = Role::all();
+        $users = User::whereNull('employee_id')
+            ->orWhere('employee_id', $employee->id)
+            ->orderBy('name')
+            ->get();
+        $linkedUserId = User::where('employee_id', $employee->id)->value('id');
 
-        return view('employee.edit', compact('employee', 'departments', 'roles'));
+        return view('employee.edit', compact('employee', 'departments', 'roles', 'users', 'linkedUserId'));
     }
 
     public function update(Request $request, Employee $employee)
@@ -68,16 +83,30 @@ class EmployeeController extends Controller
             'department_id' => ['required'],
             'role_id' => ['required'],
             'status' => ['required', 'string'],
-            'salary' => ['required', 'numeric']
+            'salary' => ['required', 'numeric'],
+            'user_id' => ['nullable', 'exists:users,id'],
         ]);
 
+        $userId = $validated['user_id'] ?? null;
+        unset($validated['user_id']);
+
         $employee->update($validated);
+
+        User::where('employee_id', $employee->id)
+            ->where('id', '!=', $userId ?? 0)
+            ->update(['employee_id' => null]);
+
+        if ($userId) {
+            User::whereKey($userId)->update(['employee_id' => $employee->id]);
+        }
 
         return redirect()->route('employee.index')->with('success', 'Employee has been updated successfully!');
     }
 
     public function destroy(Employee $employee)
     {
+        User::where('employee_id', $employee->id)->update(['employee_id' => null]);
+
         $employee->delete();
 
         return redirect()->route('employee.index')->with('success', 'Employee has been deleted successfully.');

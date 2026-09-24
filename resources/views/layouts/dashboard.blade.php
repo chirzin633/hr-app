@@ -129,7 +129,7 @@
                         </li>
 
                         <li class="sidebar-item">
-                            <a href="#" class='sidebar-link'>
+                            <a href="{{ url('/logout') }}" class='sidebar-link'>
                                 <i class="bi-box-arrow-right bi"></i>
                                 <span>Logout</span>
                             </a>

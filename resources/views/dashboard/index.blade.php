@@ -11,6 +11,16 @@
         <h3>Dashboard</h3>
     </div>
 
+    @if (!$user->employee)
+        <div class="alert alert-warning">
+            Akun belum terhubung ke data employee, sebagian menu dibatasi. Hubungi HR untuk menghubungkan akun ini.
+        </div>
+    @elseif(!$user->employee->role)
+        <div class="alert alert-warning">
+            Data employee belum memiliki role. Hubungi HR untuk mengatur role akun ini.
+        </div>
+    @endif
+
     <div class="page-content">
         <section class="row">
             <div class="col-12 col-lg-9">

@@ -15,20 +15,46 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::middleware('auth')->group(function () {
 
-Route::resource('employee', EmployeeController::class);
-Route::resource('department', DepartmentController::class);
-Route::resource('role', RoleController::class);
-Route::resource('presence', PresenceController::class);
-Route::resource('payroll', PayrollController::class);
-Route::get('/payroll/{payroll}/print', [PayrollController::class, 'print'])->name('payroll.print');
-Route::resource('leave-request', LeaveRequestController::class);
-Route::patch('/leave-request/{leave_request}/confirm', [LeaveRequestController::class, 'confirm'])->name('leave-request.confirm');
-Route::patch('/leave-request/{leave_request}/reject', [LeaveRequestController::class, 'reject'])->name('leave-request.reject');
+    // 🔹 Group untuk Super Admin, HR Officer, Supervisor
+    Route::middleware(['role:Super Admin, HR Officer, Supervisor'])->group(function () {
+        Route::resource('employee', EmployeeController::class);
+        Route::resource('department', DepartmentController::class);
+        Route::resource('role', RoleController::class);
+    });
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-Route::resource('task', TaskController::class);
-Route::patch('task/{task}/status', [TaskController::class, 'updateStatus'])->name('task.updateStatus');
+    // 🔹 Group untuk Super Admin, HR Officer, Supervisor, Manager, Staff
+    Route::middleware(['role:Super Admin, HR Officer, Supervisor, Manager, Staff'])->group(function () {
+        Route::resource('presence', PresenceController::class);
+        Route::resource('leave-request', LeaveRequestController::class);
+        Route::resource('task', TaskController::class);
+    });
+
+    // 🔹 Group untuk Super Admin, HR Officer
+    Route::middleware(['role:Super Admin, HR Officer'])->group(function () {
+        Route::resource('payroll', PayrollController::class);
+        Route::get('/payroll/{payroll}/print', [PayrollController::class, 'print'])->name('payroll.print');
+    });
+
+    // 🔹 Route khusus leave-request confirm/reject
+    Route::middleware(['role:Super Admin, HR Officer, Supervisor, Manager'])->group(function () {
+        Route::patch('/leave-request/{leave_request}/confirm', [LeaveRequestController::class, 'confirm'])
+            ->name('leave-request.confirm');
+        Route::patch('/leave-request/{leave_request}/reject', [LeaveRequestController::class, 'reject'])
+            ->name('leave-request.reject');
+    });
+
+    // 🔹 Dashboard - terbuka untuk semua user login (Opsi A).
+    // Cek role tetap berlaku di route resource di bawah, bukan di sini,
+    // agar user tanpa employee (mis. baru register) tidak 403 saat login.
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // 🔹 Task update status
+    Route::middleware(['role:Super Admin, HR Officer, Supervisor, Manager'])->group(function () {
+        Route::patch('task/{task}/status', [TaskController::class, 'updateStatus'])->name('task.updateStatus');
+    });
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
