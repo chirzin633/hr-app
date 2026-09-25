@@ -72,63 +72,63 @@
                     <ul class="menu">
                         <li class="sidebar-title">Menu</li>
 
-                        <li class="sidebar-item active">
+                        <li class="sidebar-item {{ request()->is('dashboard') ? 'active' : '' }}">
                             <a href="/dashboard" class='sidebar-link'>
                                 <i class="bi-grid-fill bi"></i>
                                 <span>Dashboard</span>
                             </a>
                         </li>
 
-                        <li class="sidebar-item">
+                        <li class="sidebar-item {{ request()->is('task') ? 'active' : '' }}">
                             <a href="/task" class='sidebar-link'>
                                 <i class="bi-check-circle-fill bi"></i>
                                 <span>Task</span>
                             </a>
                         </li>
 
-                        <li class="sidebar-item">
+                        <li class="sidebar-item {{ request()->is('employee') ? 'active' : '' }}">
                             <a href="/employee" class='sidebar-link'>
                                 <i class="bi-people-fill bi"></i>
                                 <span>Employee</span>
                             </a>
                         </li>
 
-                        <li class="sidebar-item">
+                        <li class="sidebar-item {{ request()->is('department') ? 'active' : '' }}">
                             <a href="/department" class='sidebar-link'>
                                 <i class="bi-briefcase bi"></i>
                                 <span>Department</span>
                             </a>
                         </li>
 
-                        <li class="sidebar-item">
+                        <li class="sidebar-item {{ request()->is('role') ? 'active' : '' }}">
                             <a href="/role" class='sidebar-link'>
                                 <i class="bi-person-fill-gear bi"></i>
                                 <span>Role</span>
                             </a>
                         </li>
 
-                        <li class="sidebar-item">
+                        <li class="sidebar-item {{ request()->is('presence') ? 'active' : '' }}">
                             <a href="/presence" class='sidebar-link'>
                                 <i class="bi-table bi"></i>
                                 <span>Presence</span>
                             </a>
                         </li>
 
-                        <li class="sidebar-item">
+                        <li class="sidebar-item {{ request()->is('payroll') ? 'active' : '' }}">
                             <a href="/payroll" class='sidebar-link'>
                                 <i class="bi-currency-dollar bi"></i>
                                 <span>Payroll</span>
                             </a>
                         </li>
 
-                        <li class="sidebar-item">
+                        <li class="sidebar-item {{ request()->is('leave-request') ? 'active' : '' }}">
                             <a href="/leave-request" class='sidebar-link'>
                                 <i class="bi-shift-fill bi"></i>
                                 <span>Leave Request</span>
                             </a>
                         </li>
 
-                        <li class="sidebar-item">
+                        <li class="sidebar-item {{ request()->is('logout') ? 'active' : '' }}">
                             <a href="#" class='sidebar-link'>
                                 <i class="bi-box-arrow-right bi"></i>
                                 <span>Logout</span>
