@@ -90,7 +90,7 @@
                                 <option value="" disabled>-- Choose Status --</option>
                                 <option value="present" @selected(old('status', $presence->status) == 'present')>Present</option>
                                 <option value="absent"@selected(old('status', $presence->status) == 'absenr')>Absent</option>
-                                <option value="late" @selected(old('status', $presence->status) == 'late')>Late</option>
+                                <option value="sick" @selected(old('status', $presence->status) == 'sick')>Sick</option>
                                 <option value="leave" @selected(old('status', $presence->status) == 'leave')>Leave</option>
                             </select>
                             @error('status')

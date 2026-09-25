@@ -88,7 +88,7 @@
                                 <option value="" disabled selected>-- Choose Status --</option>
                                 <option value="present">Present</option>
                                 <option value="absent">Absent</option>
-                                <option value="late">Late</option>
+                                <option value="sick">Sick</option>
                                 <option value="leave">Leave</option>
                             </select>
                             @error('status')
