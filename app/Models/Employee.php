@@ -34,4 +34,9 @@ class Employee extends Model
     {
         return $this->belongsTo(Role::class);
     }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }
