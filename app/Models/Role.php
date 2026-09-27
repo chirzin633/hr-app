@@ -11,5 +11,6 @@ class Role extends Model
     /** @use HasFactory<\Database\Factories\RoleFactory> */
     use HasFactory, SoftDeletes;
 
+    protected $table = 'job_roles';
     protected $fillable = ['title', 'description'];
 }

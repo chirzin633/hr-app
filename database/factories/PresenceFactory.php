@@ -31,7 +31,7 @@ class PresenceFactory extends Factory
             'check_in' => $checkIn,
             'check_out' => $chekOut,
             'date' => $date,
-            'status' => $this->faker->randomElement(['present', 'absent', 'late', 'leave']),
+            'status' => $this->faker->randomElement(['present', 'absent', 'sick', 'leave']),
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now()
         ];

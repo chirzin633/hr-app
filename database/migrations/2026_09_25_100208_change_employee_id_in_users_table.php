@@ -6,28 +6,50 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('employee_id');
+        if (!Schema::hasTable('users')) {
+            return;
+        }
 
-            $table->foreignId('employee_id')->nullable()->constrained('employees')->onDelete('cascade');
+        // 1. Hapus FK lama HANYA jika benar-benar ada
+        Schema::table('users', function (Blueprint $table) {
+            if (Schema::hasIndex('users', 'users_employee_id_foreign')) {
+                $table->dropForeign('users_employee_id_foreign');
+            }
+        });
+
+        // 2. Hapus kolom lama kalau ada
+        if (Schema::hasColumn('users', 'employee_id')) {
+            Schema::table('users', function (Blueprint $table) {
+                $table->dropColumn('employee_id');
+            });
+        }
+
+        // 3. Buat FK baru ke tabel employees
+        Schema::table('users', function (Blueprint $table) {
+            $table->foreignId('employee_id')
+                ->nullable()
+                ->after('id')
+                ->constrained('employees')
+                ->nullOnDelete();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropForeign(['employee_id']);
-            $table->dropColumn('employee_id');
+        if (!Schema::hasTable('users')) {
+            return;
+        }
 
-            $table->string('employee_id')->default(0);
+        Schema::table('users', function (Blueprint $table) {
+            if (Schema::hasIndex('users', 'users_employee_id_foreign')) {
+                $table->dropForeign('users_employee_id_foreign');
+            }
+
+            if (Schema::hasColumn('users', 'employee_id')) {
+                $table->dropColumn('employee_id');
+            }
         });
     }
 };
