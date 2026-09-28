@@ -11,55 +11,53 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return redirect()->route('login');
-});
+Route::get('/', fn() => redirect()->route('login'));
 
-// Dashboard
-Route::group([], function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-});
+Route::middleware(['auth'])->group(function () {
 
-// Task
-Route::group([], function () {
-    Route::resource('task', TaskController::class);
-    Route::patch('task/{task}/status', [TaskController::class, 'updateStatus'])->name('task.updateStatus');
-});
+    // Dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+        ->name('dashboard')
+        ->middleware('permission:dashboard.view');
 
-// Employee
-Route::group([], function () {
-    Route::resource('employee', EmployeeController::class);
-});
+    // Task
+    Route::patch('task/{task}/status', [TaskController::class, 'updateStatus'])
+        ->name('task.updateStatus')
+        ->middleware('permission:task.edit');
 
-// Department
-Route::group([], function () {
-    Route::resource('department', DepartmentController::class);
-});
+    Route::resource('task', TaskController::class)
+        ->middleware('permission:task.view');
 
-// Role
-Route::group([], function () {
-    Route::resource('role', RoleController::class);
-});
+    // Employee
+    Route::resource('employee', EmployeeController::class)
+        ->middleware('permission:employee.view');
 
-// Presence
-Route::group([], function () {
-    Route::resource('presence', PresenceController::class);
-});
+    // Department
+    Route::resource('department', DepartmentController::class)
+        ->middleware('permission:department.view');
 
-// Payroll
-Route::group([], function () {
-    Route::resource('payroll', PayrollController::class);
-    Route::get('/payroll/{payroll}/print', [PayrollController::class, 'print'])->name('payroll.print');
-});
+    // Role / Job Role
+    Route::resource('role', RoleController::class)
+        ->middleware('permission:job_role.view');
 
-// Leave Request
-Route::group([], function () {
-    Route::resource('leave-request', LeaveRequestController::class);
-    Route::patch('/leave-request/{leave_request}/confirm', [LeaveRequestController::class, 'confirm'])->name('leave-request.confirm');
-    Route::patch('/leave-request/{leave_request}/reject', [LeaveRequestController::class, 'reject'])->name('leave-request.reject');
-});
+    // Presence
+    Route::resource('presence', PresenceController::class)
+        ->middleware('permission:presence.view');
 
-Route::middleware('auth')->group(function () {
+    // Payroll
+    Route::middleware('permission:payroll.view')->group(function () {
+        Route::get('/payroll/{payroll}/print', [PayrollController::class, 'print'])->name('payroll.print');
+        Route::resource('payroll', PayrollController::class);
+    });
+
+    // Leave Request
+    Route::middleware('permission:leave_request.view')->group(function () {
+        Route::patch('/leave-request/{leave_request}/confirm', [LeaveRequestController::class, 'confirm'])->name('leave-request.confirm');
+        Route::patch('/leave-request/{leave_request}/reject', [LeaveRequestController::class, 'reject'])->name('leave-request.reject');
+        Route::resource('leave-request', LeaveRequestController::class);
+    });
+
+    // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
