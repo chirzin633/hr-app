@@ -20,7 +20,7 @@ class PresenceFactory extends Factory
      */
     public function definition(): array
     {
-        $date = $this->faker->dateTimeBetween('-1 month', 'now');
+        $date = $this->faker->dateTimeBetween('-4 month', 'now');
         $checkIn = $this->faker->dateTimeBetween($date->format('Y-m-d') . ' 08:00:00' . $date->format('Y-m-d') . ' 09:00:00');
         $chekOut = $this->faker->dateTimeBetween($date->format('Y-m-d') . ' 16:00:00' . $date->format('Y-m-d') . ' 17:00:00');
         $employee = Employee::inRandomOrder()->first()?->id ?? Employee::factory();

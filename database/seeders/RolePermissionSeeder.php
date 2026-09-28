@@ -19,15 +19,15 @@ class RolePermissionSeeder extends Seeder
 
         $permissions = [
             'dashboard.view',
+            'dashboard.chart',
             'employee.view',
-            'employee.create',
-            'employee.edit',
-            'employee.delete',
+            'employee.manage',
             'department.view',
             'department.manage',
             'job_role.view',
             'job_role.manage',
             'task.view',
+            'task.edit',
             'task.manage',
             'presence.view',
             'presence.manage',
@@ -47,16 +47,20 @@ class RolePermissionSeeder extends Seeder
         $hr = ModelsRole::firstOrCreate(['name' => 'HR Officer']);
         $supervisor = ModelsRole::firstOrCreate(['name' => 'Supervisor']);
 
-        $superAdmin->givePermissionTo(Permission::all());
-        $manager->givePermissionTo(['dashboard.view', 'employee.view', 'department.view', 'job_role.view', 'task.view', 'payroll.view', 'leave_request.view']);
-        $hr->givePermissionTo(Permission::all());
-        $supervisor->givePermissionTo(Permission::all());
-        $staff->givePermissionTo([
-            'employee.view',
-            'employee.create',
+        // syncPermissions (bukan give) agar re-run MENCABUT permission
+        // yang sudah dihapus dari matriks — menutup kelebihan akses lama.
+        $superAdmin->syncPermissions(Permission::all());
+        $manager->syncPermissions([
+            'dashboard.view', 'dashboard.chart', 'employee.view', 'department.view',
+            'job_role.view', 'task.view', 'presence.view', 'payroll.view', 'leave_request.view',
+        ]);
+        $hr->syncPermissions(Permission::all());
+        $supervisor->syncPermissions(Permission::all());
+        $staff->syncPermissions([
+            'dashboard.view',
             'task.view',
+            'task.edit',
             'presence.view',
-            'payroll.view',
             'leave_request.view',
         ]);
     }

@@ -89,7 +89,13 @@
                         <h4>Latest Presence</h4>
                     </div>
                     <div class="card-body">
-                        <canvas id="presenceBarChart"></canvas>
+                        @can('dashboard.chart')
+                            <canvas id="presenceBarChart"></canvas>
+                        @else
+                            <div class="alert alert-info mb-0">
+                                Ringkasan grafik presence hanya tersedia untuk manajemen.
+                            </div>
+                        @endcan
                     </div>
                 </div>
             </div>
@@ -154,6 +160,7 @@
 
 
 @push('scripts')
+    @can('dashboard.chart')
     <script>
         const presenceChartEl = document.getElementById('presenceBarChart');
         if (presenceChartEl) {
@@ -189,4 +196,5 @@
             });
         }
     </script>
+    @endcan
 @endpush

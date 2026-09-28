@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Employee extends Model
@@ -35,8 +36,9 @@ class Employee extends Model
         return $this->belongsTo(Role::class);
     }
 
-    public function user(): BelongsTo
+    public function user(): HasOne
     {
-        return $this->belongsTo(User::class);
+        // FK ada di users.employee_id, jadi dari sisi Employee ini HasOne.
+        return $this->hasOne(User::class, 'employee_id');
     }
 }

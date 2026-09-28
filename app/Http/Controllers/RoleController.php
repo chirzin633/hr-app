@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Employee;
 use App\Models\Role;
+use App\Services\EmployeeRoleSync;
 use Illuminate\Cache\RetrievesMultipleKeys;
 use Illuminate\Http\Request;
 
@@ -51,7 +53,23 @@ class RoleController extends Controller
 
         $role->update($validated);
 
-        return redirect()->route('role.index')->with('success', 'Role has been updated successfully!');
+        // Bila title job_role di-rename, sinkronkan ulang Spatie role
+        // semua employee yang memakai job_role ini.
+        $synced = 0;
+        if ($role->wasChanged('title')) {
+            $employees = Employee::where('role_id', $role->id)->get();
+            foreach ($employees as $employee) {
+                $sync = EmployeeRoleSync::sync($employee);
+                $synced += $sync['users'];
+            }
+        }
+
+        $message = 'Role has been updated successfully!';
+        if ($synced > 0) {
+            $message .= " {$synced} akun login disinkron ke role '{$role->title}'.";
+        }
+
+        return redirect()->route('role.index')->with('success', $message);
     }
 
     public function destroy(Role $role)

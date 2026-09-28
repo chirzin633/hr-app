@@ -77,6 +77,18 @@
                     </div>
 
                     <div class="mb-3">
+                        <label for="" class="fw-bold">Login Account</label>
+                        <p>
+                            @if ($linkedUser)
+                                {{ $linkedUser->name }} ({{ $linkedUser->email }})
+                                — Spatie role: {{ $linkedUser->getRoleNames()->join(', ') ?: '-' }}
+                            @else
+                                <span class="text-muted">Belum terhubung ke akun login</span>
+                            @endif
+                        </p>
+                    </div>
+
+                    <div class="mb-3">
                         <label for="" class="fw-bold">Status</label>
                         <p>
                             @if ($employee->status == 'inactive')

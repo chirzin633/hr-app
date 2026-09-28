@@ -2,22 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Concerns\FiltersOwnRecords;
 use App\Models\Employee;
 use App\Models\Presence;
 use Illuminate\Http\Request;
 
 class PresenceController extends Controller
 {
+    use FiltersOwnRecords;
+
     public function index()
     {
-        $presences = Presence::all();
+        $presences = $this->scopeToOwn(Presence::query(), 'presence.manage')->get();
 
         return view('presence.index', compact('presences'));
     }
 
     public function create()
     {
-        $employees = Employee::all();
+        $employees = $this->selectableEmployees('presence.manage');
         return view('presence.create', compact('employees'));
     }
 
@@ -31,6 +34,8 @@ class PresenceController extends Controller
             'status' => ['required', 'string']
         ]);
 
+        $validated['employee_id'] = $this->resolveEmployeeId((int) $validated['employee_id'], 'presence.manage');
+
         $validated['check_in'] = $validated['check_in'] . ':00';
         if ($validated['check_out']) {
             $validated['check_out'] = $validated['check_out'] . ':00';
@@ -39,6 +44,15 @@ class PresenceController extends Controller
         Presence::create($validated);
 
         return redirect()->route('presence.index')->with('success', 'Presence recorded succesfully!');
+    }
+
+    public function show(Presence $presence)
+    {
+        $this->authorizeRecordOwnership($presence, 'presence.manage');
+
+        $presence->loadMissing('employee');
+
+        return view('presence.show', compact('presence'));
     }
 
     public function edit(Presence $presence)

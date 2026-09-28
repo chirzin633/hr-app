@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Concerns\FiltersOwnRecords;
 use App\Models\Employee;
 use App\Models\Task;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
+    use FiltersOwnRecords;
+
     public function index()
     {
-        $tasks = Task::all();
+        $tasks = $this->scopeToOwn(Task::query(), 'task.manage')->get();
 
         return view('task.index', compact('tasks'));
     }
@@ -69,11 +72,15 @@ class TaskController extends Controller
 
     public function show(Task $task)
     {
+        $this->authorizeRecordOwnership($task, 'task.manage');
+
         return view('task.show', compact('task'));
     }
 
     public function updateStatus(Request $request, Task $task)
     {
+        $this->authorizeRecordOwnership($task, 'task.manage');
+
         $request->validate([
             'status' => ['required', 'in:pending,in_progress,completed']
         ]);

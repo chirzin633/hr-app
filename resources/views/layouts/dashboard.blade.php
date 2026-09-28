@@ -79,60 +79,78 @@
                             </a>
                         </li>
 
+                        @can('task.view')
                         <li class="sidebar-item {{ request()->is('task') ? 'active' : '' }}">
                             <a href="/task" class='sidebar-link'>
                                 <i class="bi-check-circle-fill bi"></i>
                                 <span>Task</span>
                             </a>
                         </li>
+                        @endcan
 
+                        @can('employee.view')
                         <li class="sidebar-item {{ request()->is('employee') ? 'active' : '' }}">
                             <a href="/employee" class='sidebar-link'>
                                 <i class="bi-people-fill bi"></i>
                                 <span>Employee</span>
                             </a>
                         </li>
+                        @endcan
 
+                        @can('department.view')
                         <li class="sidebar-item {{ request()->is('department') ? 'active' : '' }}">
                             <a href="/department" class='sidebar-link'>
                                 <i class="bi-briefcase bi"></i>
                                 <span>Department</span>
                             </a>
                         </li>
+                        @endcan
 
+                        @can('job_role.view')
                         <li class="sidebar-item {{ request()->is('role') ? 'active' : '' }}">
                             <a href="/role" class='sidebar-link'>
                                 <i class="bi-person-fill-gear bi"></i>
                                 <span>Role</span>
                             </a>
                         </li>
+                        @endcan
 
+                        @can('presence.view')
                         <li class="sidebar-item {{ request()->is('presence') ? 'active' : '' }}">
                             <a href="/presence" class='sidebar-link'>
                                 <i class="bi-table bi"></i>
                                 <span>Presence</span>
                             </a>
                         </li>
+                        @endcan
 
+                        @can('payroll.view')
                         <li class="sidebar-item {{ request()->is('payroll') ? 'active' : '' }}">
                             <a href="/payroll" class='sidebar-link'>
                                 <i class="bi-currency-dollar bi"></i>
                                 <span>Payroll</span>
                             </a>
                         </li>
+                        @endcan
 
+                        @can('leave_request.view')
                         <li class="sidebar-item {{ request()->is('leave-request') ? 'active' : '' }}">
                             <a href="/leave-request" class='sidebar-link'>
                                 <i class="bi-shift-fill bi"></i>
                                 <span>Leave Request</span>
                             </a>
                         </li>
+                        @endcan
 
-                        <li class="sidebar-item {{ request()->is('logout') ? 'active' : '' }}">
-                            <a href="#" class='sidebar-link'>
-                                <i class="bi-box-arrow-right bi"></i>
-                                <span>Logout</span>
-                            </a>
+                        <li class="sidebar-item">
+                            <form method="POST" action="{{ route('logout') }}" id="sidebar-logout-form">
+                                @csrf
+                                <a href="{{ route('logout') }}" class='sidebar-link'
+                                    onclick="event.preventDefault(); document.getElementById('sidebar-logout-form').submit();">
+                                    <i class="bi-box-arrow-right bi"></i>
+                                    <span>Logout</span>
+                                </a>
+                            </form>
                         </li>
                     </ul>
                 </div>

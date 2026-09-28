@@ -47,6 +47,18 @@
                         </div>
                     @endif
 
+                    @if ($linkedUser)
+                        <div class="alert alert-info">
+                            Akun login terhubung: <strong>{{ $linkedUser->name }} ({{ $linkedUser->email }})</strong>
+                            — Spatie role saat ini: <strong>{{ $linkedUser->getRoleNames()->join(', ') ?: '-' }}</strong>.
+                            Mengubah Role di bawah akan menyinkronkan permission akun ini.
+                        </div>
+                    @else
+                        <div class="alert alert-warning">
+                            Employee ini belum terhubung ke akun login mana pun, perubahan Role tidak berpengaruh ke permission.
+                        </div>
+                    @endif
+
                     <form action="{{ route('employee.update', $employee->id) }}" method="POST">
                         @csrf
                         @method('PUT')

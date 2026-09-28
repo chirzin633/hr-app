@@ -21,7 +21,11 @@ class DashboardController extends Controller
         $presence = Presence::count();
         $tasks = Task::latest()->take(5)->get();
 
-        $presenceChart = $this->getPresenceChart();
+        // Grafik agregat hanya untuk yang punya permission dashboard.chart
+        // (Staff tetap bisa membuka dashboard, tapi chart disembunyikan).
+        $presenceChart = auth()->user()->can('dashboard.chart')
+            ? $this->getPresenceChart()
+            : null;
 
 
         return view('dashboard.index', compact('employee', 'department', 'payroll', 'presence', 'tasks', 'presenceChart'));
@@ -37,9 +41,13 @@ class DashboardController extends Controller
         $labels = $months->map(fn($m) => $m->format('M Y'))->toArray();
 
         // Ambil semua data presensi tanpa filter user
+        $monthExpr = DB::getDriverName() === 'sqlite'
+            ? "strftime('%Y-%m', date) as ym"
+            : "DATE_FORMAT(date, '%Y-%m') as ym";
+
         $raw = Presence::where('date', '>=', $months->first()->startOfMonth())
             ->select(
-                DB::raw("DATE_FORMAT(date, '%Y-%m') as ym"),
+                DB::raw($monthExpr),
                 'status',
                 DB::raw('COUNT(*) as total')
             )
