@@ -1,59 +1,78 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# HR App
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A human resource management app built with Laravel. It covers the day-to-day stuff an HR team deals with: employee records, departments, job roles, task assignments, attendance (presence), payroll with printable slips, and leave requests with an approval flow.
 
-## About Laravel
+## What it does
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Dashboard** - headcount stats, latest tasks, and a presence chart (the chart is only visible to management roles).
+- **Employees** - full CRUD with department, job role, status, and salary. Each employee can be linked to a login account.
+- **Departments & Job Roles** - master data behind the employee records.
+- **Tasks** - assign tasks to employees, track status (`pending` / `in_progress` / `completed`).
+- **Presence** - daily check-in/check-out records per employee.
+- **Payroll** - salary records per employee, with a printable PDF slip (DomPDF).
+- **Leave Requests** - employees submit requests; privileged roles confirm or reject them.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Roles & access
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Access control uses [spatie/laravel-permission](https://spatie.be/docs/laravel-permission). There are five roles:
 
-## Learning Laravel
+| Role        | Sees                                                                                    | Can manage                                                |
+| ----------- | --------------------------------------------------------------------------------------- | --------------------------------------------------------- |
+| Super Admin | Everything                                                                              | Everything                                                |
+| HR Officer  | Everything                                                                              | Everything                                                |
+| Supervisor  | Everything                                                                              | Everything                                                |
+| Manager     | Dashboard (with chart), employees, departments, roles, tasks, presence, payroll, leaves | Nothing (view only)                                       |
+| Staff       | Dashboard (no chart), own tasks, own presence, own leave requests                       | Own task status, own presence entries, own leave requests |
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+A few rules worth knowing:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- Everyone who registers gets the **Staff** role automatically, plus a linked employee record.
+- Changing someone's job role in the Employee menu also syncs their login permissions.
+- You can't change your own role, and you can't demote the last Super Admin - the app will stop you with a 403.
+- Staff only ever see their own tasks, presence, and leave records. What isn't yours returns 403.
 
-## Laravel Sponsors
+## Tech Stack
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- Laravel 12
+- Spatie Permision
+- Breeze
+- MySQL
 
-### Premium Partners
+## Setup
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+```bash
+composer install
+cp .env.example .env
+php artisan key:generate
+```
 
-## Contributing
+Point `DB_*` in `.env` at your database, then:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+php artisan migrate --seed
+npm install && npm run build
+php artisan serve
+```
 
-## Code of Conduct
+Run the test suite with:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+php artisan test
+```
 
-## Security Vulnerabilities
+## Creating the first Super Admin
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Registration only ever creates Staff accounts, so the first admin is bootstrapped from the terminal. Register normally through `/register` first, then promote the account:
 
-## License
+```bash
+php artisan user:promote you@company.com
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This assigns the Super Admin role, makes sure the account is linked to an employee record, and aligns the job role to match. After that, further promotions can be done through the Employee menu in the UI - no more terminal needed.
+
+If permissions ever get out of sync (for example after pulling changes to the permission seeder), refresh them with:
+
+```bash
+php artisan db:seed --class=RolePermissionSeeder
+php artisan permission:cache-reset
+```
